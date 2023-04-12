@@ -31,7 +31,7 @@ jobs:
       - name: Checkout GitHub Pages branch
         uses: actions/checkout@v2
         with:
-          ref: gh-pages
+          ref: master
           fetch-depth: 0
 
       - name: Copy index.html file
