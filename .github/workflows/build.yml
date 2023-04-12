@@ -33,11 +33,8 @@ jobs:
       - name: Remove existing index.html
         run: rm index.html
 
-      - name: Download new index.html
-        uses: actions/download-artifact@v2
-        with:
-          name: new-index-html
-          path: index.html
+      - name: Copy index.html file
+        run: cp -r ${{ github.workspace }}/index.html .
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
