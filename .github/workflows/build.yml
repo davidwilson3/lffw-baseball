@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          path: '.'
 
       - name: Set up Node.js environment
         uses: actions/setup-node@v2
@@ -28,13 +30,10 @@ jobs:
           name: new-index-html
           path: index.html
 
-      - name: Checkout GitHub Pages branch
-        uses: actions/checkout@v2
-        with:
-          ref: master
-          fetch-depth: 0
+      - name: Remove existing index.html
+        run: rm index.html
 
-      - name: Replace existing index.html
+      - name: Download new index.html
         uses: actions/download-artifact@v2
         with:
           name: new-index-html
