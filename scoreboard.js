@@ -124,50 +124,31 @@ function generateHtml(scores) {
   const createTeamRow = (abbr) => {
     const teamData = scores[abbr];
     const teamScores = teamData.scores;
+    const completed = teamData.completed;
     const total = Object.keys(teamScores).length;
     const teamColor = teamColors[abbr] || { primary: "", secondary: "" };
 
     const scoresCells = [...Array(upperBound)].map((_, index) => {
       const date = new Date(teamScores[index + 1] || "");
-      const formattedDate =
-        date.getTime() > 0
-          ? `${date.getMonth() + 1}/${date.getDate() + 1}/${date
-              .getFullYear()
-              .toString()
-              .substr(-2)}`
-          : "";
+      const formattedDate = date.getTime() > 0 ? `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear().toString().substr(-2)}` : "";
       const scoreClass = formattedDate === "" ? "empty" : "date";
       return `<td class="${scoreClass}">${formattedDate}</td>`;
     });
 
     const teamTotalCell = `<td>${total}</td>`;
 
-    return `<tr><td style="background-color: ${teamColor.primary}; color: ${
-      teamColor.secondary
-    }; text-align: center; width: 10%; font-weight: bold;">${abbr}</td>${scoresCells.join(
-      ""
-    )}${teamTotalCell}</tr>`;
+    return `<tr><td style="background-color: ${teamColor.primary}; color: ${teamColor.secondary}; text-align: center; width: 10%; font-weight: bold;">${abbr}</td>${scoresCells.join("")}${teamTotalCell}</tr>`;
   };
 
   const specialRows = specialAbbreviations.map(createTeamRow).join("");
   const otherRows = otherAbbreviations.map(createTeamRow).join("");
 
-  const headers = Array.from(
-    Array(upperBound),
-    (_, idx) =>
-      `<th style="background-color: white; color: black; font-weight: bold;">${
-        idx + 1
-      }</th>`
-  );
-  headers.unshift(
-    '<th style="background-color: white; color: black; font-weight: bold; width: 10%;">Abbreviation</th>'
-  );
+  const headers = Array.from(Array(upperBound), (_, idx) => `<th style="background-color: white; color: black; font-weight: bold;">${idx + 1}</th>`);
+  headers.unshift('<th style="background-color: white; color: black; font-weight: bold; width: 10%;">Abbreviation</th>');
 
   // Find the winner based on the rules described
   const findWinner = () => {
-    const eligibleSpecialAbbreviations = specialAbbreviations.filter(
-      (abbr) => scores[abbr].completed !== null
-    );
+    const eligibleSpecialAbbreviations = specialAbbreviations.filter(abbr => scores[abbr].completed !== null);
     if (eligibleSpecialAbbreviations.length === 0) {
       return null;
     } else if (eligibleSpecialAbbreviations.length === 1) {
@@ -175,7 +156,7 @@ function generateHtml(scores) {
     } else {
       let earliestDate = Infinity;
       let winner = null;
-      eligibleSpecialAbbreviations.forEach((abbr) => {
+      eligibleSpecialAbbreviations.forEach(abbr => {
         const date = new Date(scores[abbr].completed);
         if (date < earliestDate) {
           earliestDate = date;
@@ -187,27 +168,7 @@ function generateHtml(scores) {
   };
 
   const winner = findWinner();
-  const winnerHtml = `<h2 style="text-align: center">The winner is: ${
-    winner ? winner : "NO ONE"
-  }</h2>`;
-
-  var currentdate = new Date();
-  var lastUpdated =
-    "Last Updated: " +
-    (currentdate.getMonth() + 1) +
-    "/" +
-    currentdate.getDate() +
-    "/" +
-    currentdate.getFullYear() +
-    " @ " +
-    currentdate.getHours() +
-    ":" +
-    currentdate.getMinutes() +
-    ":" +
-    currentdate.getSeconds();
-
-  const lastUpdatedHtml = `<div style="text-align: center; margin-top: 10px">${lastUpdated}</div>`;
-
+  const winnerHtml = `<h2 style="text-align: center">The winner is: ${winner ? winner : "NO ONE"}</h2>`
   return `
     <style>
       table {
@@ -227,8 +188,8 @@ function generateHtml(scores) {
         color: black;
         font-weight: bold;
       }
-      th:nth-child(-n+${upperBound + 1}),
-      td:nth-child(-n+${upperBound + 1}) {
+      th:nth-child(-n+${upperBound+1}),
+      td:nth-child(-n+${upperBound+1}) {
         background-color: lightgray;
         width: calc(80% / ${upperBound});
       }
@@ -243,19 +204,14 @@ function generateHtml(scores) {
     ${winnerHtml}
     <table>
       <thead>
-        <tr>${headers.join(
-          ""
-        )}<th style="background-color: white; color: black; font-weight: bold;">Total</th></tr>
+        <tr>${headers.join("")}<th style="background-color: white; color: black; font-weight: bold;">Total</th></tr>
       </thead>
       <tbody>
         ${specialRows}
-        <tr><td colspan="${
-          upperBound + 3
-        }" style="height: 20px; background-color: white;"></td></tr>
+        <tr><td colspan="${upperBound + 3}" style="height: 20px; background-color: white;"></td></tr>
         ${otherRows}
       </tbody>
     </table>
-    ${lastUpdatedHtml}
   `;
 }
 
