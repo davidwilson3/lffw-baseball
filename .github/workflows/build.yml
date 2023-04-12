@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: get-scores-and-deploy-site
 
 on:
   schedule:
