@@ -1,4 +1,4 @@
-name: get scores and deploy site
+name: get-scores-and-deploy-site
 
 on:
   schedule:
