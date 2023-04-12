@@ -25,7 +25,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: index.html
+          name: new-index-html
           path: index.html
 
       - name: Checkout GitHub Pages branch
@@ -34,8 +34,11 @@ jobs:
           ref: master
           fetch-depth: 0
 
-      - name: Copy index.html file
-        run: cp -r ${{ github.workspace }}/index.html .
+      - name: Replace existing index.html
+        uses: actions/download-artifact@2
+        with:
+          name: new-index-html
+          path: index.html
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
