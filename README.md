@@ -1,1 +1,1 @@
-# baseball-scores
+# baseball scores game
