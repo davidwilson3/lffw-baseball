@@ -116,7 +116,7 @@ const teamColors = {
 };
 
 function generateHtml(scores) {
-  const specialAbbreviations = ["CLE", "PHI", "NYY", "SD"];
+  const specialAbbreviations = ["ATL", "CLE", "PHI", "NYY", "SD"];
   const otherAbbreviations = Object.keys(scores)
     .filter((abbr) => !specialAbbreviations.includes(abbr))
     .sort();
