@@ -24,20 +24,9 @@ jobs:
       - name: Run script
         run: node scoreboard.js
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: new-index-html
-          path: index.html
-
-      - name: Remove existing index.html
-        run: rm index.html
-
-      - name: Copy index.html file
-        run: cp -r ${{ github.workspace }}/index.html .
-
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           branch: master
           folder: '.'
+          clean: true # removes all existing files in the branch before deploying
