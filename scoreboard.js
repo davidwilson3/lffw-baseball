@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import fs from "fs-extra";
 
-const upperBound = 13;
+const upperBound = 14;
 
 export const getAllScores = async (year) => {
   try {
@@ -64,7 +64,7 @@ function addScoreToTracker(tracker, team, date) {
   const teamScores =
     abbreviation in tracker ? tracker[abbreviation][scoresLabel] : {};
 
-  if (runs in teamScores || runs > upperBound) return tracker;
+  if (runs in teamScores || runs >= upperBound) return tracker;
 
   const scores = { ...teamScores, [runs]: date };
   const completed = Object.keys(scores).length;
@@ -128,7 +128,7 @@ function generateHtml(scores) {
     const teamColor = teamColors[abbr] || { primary: "", secondary: "" };
 
     const scoresCells = [...Array(upperBound)].map((_, index) => {
-      const date = new Date(teamScores[index + 1] || "");
+      const date = new Date(teamScores[index] || "");
       const formattedDate =
         date.getTime() > 0
           ? `${date.getMonth() + 1}/${date.getDate()}/${date
