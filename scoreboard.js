@@ -156,7 +156,7 @@ function generateHtml(scores) {
     Array(upperBound),
     (_, idx) =>
       `<th style="background-color: white; color: black; font-weight: bold;">${
-        idx + 1
+        idx
       }</th>`
   );
   headers.unshift(
