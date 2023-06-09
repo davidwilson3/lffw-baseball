@@ -73,7 +73,7 @@ function addScoreToTracker(tracker, team, date) {
     ...tracker,
     [abbreviation]: {
       name: teamName,
-      finished: completed === upperBound ? date : false,
+      finished: completed === upperBound ? date : null,
       [scoresLabel]: {
         ...teamScores,
         [runs]: date,
@@ -115,8 +115,25 @@ const teamColors = {
   WSH: { primary: "#AB0003", secondary: "#14225A" },
 };
 
+const players = [
+  { name: "Zach", team: "SD", message: "Call me murder" },
+  { name: "Clayton", team: "ATL", message: "It's just nice to win one." },
+  { name: "David", team: "CLE", message: "FTC" },
+  { name: "TBoy", team: "PHI", message: "I am Tommy" },
+  { name: "Lewey", team: "NYY", message: "This is Bike Race" },
+];
+
+function formatDate(date) {
+  return date.getTime() > 0
+    ? `${date.getMonth() + 1}/${date.getDate()}/${date
+        .getFullYear()
+        .toString()
+        .substr(-2)}`
+    : "";
+}
+
 function generateHtml(scores) {
-  const specialAbbreviations = ["ATL", "CLE", "PHI", "NYY", "SD"].sort();
+  const specialAbbreviations = players.map((v) => v.team).sort();
   const otherAbbreviations = Object.keys(scores)
     .filter((abbr) => !specialAbbreviations.includes(abbr))
     .sort();
@@ -124,18 +141,15 @@ function generateHtml(scores) {
   const createTeamRow = (abbr) => {
     const teamData = scores[abbr];
     const teamScores = teamData.scores;
-    const total = Object.keys(teamScores).length;
+    const total = teamData.finished
+      ? String.fromCodePoint(0x1f346) +
+        ` (${formatDate(new Date(teamData.finished || ""))})`
+      : Object.keys(teamScores).length;
     const teamColor = teamColors[abbr] || { primary: "", secondary: "" };
 
     const scoresCells = [...Array(upperBound)].map((_, index) => {
       const date = new Date(teamScores[index] || "");
-      const formattedDate =
-        date.getTime() > 0
-          ? `${date.getMonth() + 1}/${date.getDate()}/${date
-              .getFullYear()
-              .toString()
-              .substr(-2)}`
-          : "";
+      const formattedDate = formatDate(date);
       const scoreClass = formattedDate === "" ? "empty" : "date";
       return `<td class="${scoreClass}">${formattedDate}</td>`;
     });
@@ -155,31 +169,29 @@ function generateHtml(scores) {
   const headers = Array.from(
     Array(upperBound),
     (_, idx) =>
-      `<th style="background-color: white; color: black; font-weight: bold;">${
-        idx
-      }</th>`
+      `<th style="background-color: white; color: black; font-weight: bold;">${idx}</th>`
   );
   headers.unshift(
-    '<th style="background-color: white; color: black; font-weight: bold; width: 10%;">Abbreviation</th>'
+    '<th style="background-color: white; color: black; font-weight: bold; width: 10%;">Team</th>'
   );
 
   // Find the winner based on the rules described
   const findWinner = () => {
-    const eligibleSpecialAbbreviations = specialAbbreviations.filter(
-      (abbr) => scores[abbr].completed !== null
+    const eligiblePlayers = players.filter(
+      (p) => scores[p.team].finished !== null
     );
-    if (eligibleSpecialAbbreviations.length === 0) {
+    if (eligiblePlayers.length === 0) {
       return null;
-    } else if (eligibleSpecialAbbreviations.length === 1) {
-      return eligibleSpecialAbbreviations[0];
+    } else if (eligiblePlayers.length === 1) {
+      return eligiblePlayers[0];
     } else {
       let earliestDate = Infinity;
       let winner = null;
-      eligibleSpecialAbbreviations.forEach((abbr) => {
-        const date = new Date(scores[abbr].completed);
+      eligiblePlayers.forEach((p) => {
+        const date = new Date(scores[p.team].finished);
         if (date < earliestDate) {
           earliestDate = date;
-          winner = abbr;
+          winner = p;
         }
       });
       return winner;
@@ -187,24 +199,32 @@ function generateHtml(scores) {
   };
 
   const winner = findWinner();
-  const winnerHtml = `<h2 style="text-align: center">The winner is: ${
-    winner ? winner : "NO ONE"
-  }</h2>`;
 
-  var currentdate = new Date();
-  var lastUpdated =
-    "Last Updated: " +
-    (currentdate.getMonth() + 1) +
-    "/" +
-    currentdate.getDate() +
-    "/" +
-    currentdate.getFullYear() +
-    " @ " +
-    currentdate.getHours() +
-    ":" +
-    currentdate.getMinutes() +
-    ":" +
-    currentdate.getSeconds();
+  const winnerHtml = `<div style="margin-bottom: 40px">
+    <h2 style="text-align: center">
+      The winner is: ${winner ? `${winner.name} (${winner.team})` : "NO ONE"}
+    </h2>
+    ${
+      winner ? (
+        `<h3 style="text-align: center; color:#808080">
+          <i>"${winner.message}"</i>
+        </h3>`
+      ) : (
+        ""
+      )
+    }
+  </div>`;
+
+  var currentDate = new Date();
+
+  const meridiem = currentDate.getHours() >= 12 ? "PM" : "AM";
+
+  var lastUpdated = `<b>Last Updated:</b> ${currentDate.toLocaleString(
+    "en-US",
+    {
+      timeZone: "America/New_York",
+    }
+  )} EST`;
 
   const lastUpdatedHtml = `<div style="text-align: center; margin-top: 10px">${lastUpdated}</div>`;
 
@@ -255,6 +275,7 @@ function generateHtml(scores) {
         ${otherRows}
       </tbody>
     </table>
+    </br>
     ${lastUpdatedHtml}
   `;
 }
