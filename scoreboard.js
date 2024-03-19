@@ -50,7 +50,7 @@ export const getAllScores = async (year) => {
 };
 
 function addScoreToTracker(tracker, team, date) {
-  const afterDate = Date.parse("2023-04-03T23:59:00Z");
+  const afterDate = Date.parse("2024-01-03T23:59:00Z");
   const readDate = Date.parse(date);
 
   if (readDate <= afterDate) return tracker;
@@ -116,11 +116,11 @@ const teamColors = {
 };
 
 const players = [
-  { name: "Zach", team: "SD", message: "Call me murder" },
-  { name: "Clayton", team: "ATL", message: "It's just nice to win one." },
-  { name: "David", team: "CLE", message: "FTC" },
+  { name: "Zach", team: "ATL", message: "Call me murder" },
+  { name: "Clayton", team: "NYY", message: "It's just nice to win one." },
+  { name: "David", team: "TOR", message: "FTC" },
   { name: "TBoy", team: "PHI", message: "I am Tommy" },
-  { name: "Lewey", team: "NYY", message: "This is Bike Race" },
+  { name: "Lewey", team: "LAD", message: "This is Bike Race" },
 ];
 
 function formatDate(date) {
@@ -280,7 +280,7 @@ function generateHtml(scores) {
   `;
 }
 
-const scores = await getAllScores(2023);
+const scores = await getAllScores(2024);
 const generatedHtml = generateHtml(scores);
 const filename = "index.html";
 
