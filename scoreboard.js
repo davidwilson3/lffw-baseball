@@ -140,8 +140,9 @@ function generateHtml(scores) {
 
   const createTeamRow = (abbr) => {
     const teamData = scores[abbr];
-    const teamScores = teamData.scores;
-    const total = teamData.finished
+    const teamScores = teamData?.scores ?? {};
+    const finished = teamData?.finished ?? false;
+    const total = finished
       ? String.fromCodePoint(0x1f346) +
         ` (${formatDate(new Date(teamData.finished || ""))})`
       : Object.keys(teamScores).length;
@@ -178,7 +179,7 @@ function generateHtml(scores) {
   // Find the winner based on the rules described
   const findWinner = () => {
     const eligiblePlayers = players.filter(
-      (p) => scores[p.team].finished !== null
+      (p) => (scores[p.team]?.finished ?? null) !== null
     );
     if (eligiblePlayers.length === 0) {
       return null;
