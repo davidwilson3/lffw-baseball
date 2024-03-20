@@ -118,7 +118,7 @@ const teamColors = {
 const players = [
   { name: "Zach", team: "ATL", message: "Call me murder" },
   { name: "Clayton", team: "NYY", message: "It's just nice to win one." },
-  { name: "David", team: "TOR", message: "FTC" },
+  { name: "David", team: "BAL", message: "FTC" },
   { name: "TBoy", team: "PHI", message: "I am Tommy" },
   { name: "Lewey", team: "LAD", message: "This is Bike Race" },
 ];
