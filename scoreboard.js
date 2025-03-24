@@ -116,11 +116,12 @@ const teamColors = {
 };
 
 const players = [
-  { name: "Zach", team: "ATL", message: "Call me murder" },
-  { name: "Clayton", team: "NYY", message: "It's just nice to win one." },
-  { name: "David", team: "BAL", message: "FTC" },
+  { name: "Zach", team: "AZ", message: "Call me murder" },
+  { name: "Clayton", team: "BOS", message: "It's just nice to win one." },
+  { name: "David", team: "CIN", message: "FTC" },
   { name: "TBoy", team: "PHI", message: "I am Tommy" },
-  { name: "Lewey", team: "LAD", message: "This is Bike Race" },
+  { name: "Jerome", team: "CLE", message: "This is Bike Race" },
+  { name: "Dan", team: "SD", message: "I am the best." },
 ];
 
 function formatDate(date) {
@@ -206,13 +207,11 @@ function generateHtml(scores) {
       The winner is: ${winner ? `${winner.name} (${winner.team})` : "NO ONE"}
     </h2>
     ${
-      winner ? (
-        `<h3 style="text-align: center; color:#808080">
+      winner
+        ? `<h3 style="text-align: center; color:#808080">
           <i>"${winner.message}"</i>
         </h3>`
-      ) : (
-        ""
-      )
+        : ""
     }
   </div>`;
 
@@ -281,7 +280,7 @@ function generateHtml(scores) {
   `;
 }
 
-const scores = await getAllScores(2024);
+const scores = await getAllScores(2025);
 const generatedHtml = generateHtml(scores);
 const filename = "index.html";
 
