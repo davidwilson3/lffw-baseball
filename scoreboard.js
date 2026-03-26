@@ -116,12 +116,12 @@ const teamColors = {
 };
 
 const players = [
-  { name: "Zach", team: "AZ", message: "Call me murder" },
-  { name: "Clayton", team: "BOS", message: "It's just nice to win one." },
-  { name: "David", team: "CIN", message: "FTC" },
+  { name: "Zach", team: "LAD", message: "Call me murder" },
+  { name: "Clayton", team: "SEA", message: "It's just nice to win one." },
+  { name: "David", team: "ATL", message: "FTC" },
   { name: "TBoy", team: "PHI", message: "I am Tommy" },
-  { name: "Jerome", team: "CLE", message: "This is Bike Race" },
-  { name: "Dan", team: "SD", message: "I am the best." },
+  { name: "Jerome", team: "NYY", message: "This is Bike Race" },
+  { name: "Dan", team: "TOR", message: "I am the best." },
 ];
 
 function formatDate(date) {
@@ -280,7 +280,7 @@ function generateHtml(scores) {
   `;
 }
 
-const scores = await getAllScores(2025);
+const scores = await getAllScores(2026);
 const generatedHtml = generateHtml(scores);
 const filename = "index.html";
 
